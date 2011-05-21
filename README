@@ -1,0 +1,57 @@
+Travail pratique # 1
+
+Cours:       Inf5270 gr 30
+Professeur:  Ammar Hamad
+Remise:      1 juin 2011
+Pondération: 17 points
+
+
+
+Description :
+
+Vous devez implanter une application simple de Client/Serveur. Le Client doit transmettre un fichier avec un ensemble des commandes Unix au Serveur tout en spécifiant le nom d’usager fictif et le nom du fichier à lui envoyer. Le serveur, selon le désire du client, soit : il lit le fichier et affiche le résultat de l’exécution de son contenu au niveau Client ou il stocke ce résultat dans un fichier qui l’associe à l’usager destinataire et qui sera envoyé plus tard selon sa demande. Le serveur doit également ajouter des informations pertinentes (exemple : date). 
+
+
+
+Le client dispose de commandes telles que :
+
+1) ListerFichier(Usager)
+     pour lister les fichiers, associés à un usager en particulier, qui sont stockés au niveau serveur.
+
+2) ChercherFichierStocké(Usager,Numéro)
+     pour chercher un fichier résultat qui a été sauvé dans le Serveur
+
+3) AfficherFichierRésultat(Usager, Fichier)
+     pour lire le contenu de fichier (Fichier) de l’usager Usager.
+
+4) LivrerFichierCommande(Usager, Fichier, Désire(Oui/Non))
+     pour envoyer un fichier des commandes Unix au serveur tout en indiquant si on veut que le résultat
+     soit retourné dans un fichier et afficher au niveau Client ou qu’il sera, juste, sauvé dans un fichier
+     au niveau Serveur. La fin de la saisie du message est indiquée par un point au début de la dernière ligne.
+
+5) Quitter le programme
+
+
+
+Le serveur, c’est lui qui associe les numéros aux Fichiers. Le programme doit être réalisé par une de ces méthodes:
+- Pipes
+- Pipes Nommés
+- Mémoires Partagées
+- Sémaphores.
+
+Bien sûr en C dans l’environnement Unix.
+Hypothèse : On suppose que toutes les commandes dans le fichier sont bien validées (syntaxiquement et sémantiquement)
+
+
+
+Mode d’évaluation :
+
+Manuel d’utilisation et de
+description (maximum 3 pages) : 10%
+Fonctionnement:                 50%
+Style de programmation:         30%
+Originalité:                    10%
+
+
+
+PS. Aucun retard n’est autorisé.
