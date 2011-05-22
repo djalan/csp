@@ -24,19 +24,15 @@ void envoyerCommande( const char * commande ) {
         //Open the first named pipe for writing
         wrfd = open(np_client_server, O_WRONLY);
 
-	printf( "1\n" );
         //Open the second named pipe for reading
         rdfd = open(np_server_client, O_RDONLY);
 
-	printf( "1\n" );
         //Write to the pipe
         write(wrfd, commande, strlen(commande));
 
-	printf( "1\n", commande );
         //Read from the pipe
         numread = read(rdfd, rdbuf, MAX_BUF_SIZE);
 
-	printf( "1\n", commande );
         rdbuf[numread] = '\0';
 
         printf( "%s\n", rdbuf );
@@ -182,7 +178,7 @@ int main( int argc, char * argv[] ) {
 	if ( argc > 1 ) {
 		fprintf( stderr, "%s: usage incorrect!\n", argv[0] );
 		fprintf( stderr, "Aucun argument permis.\n" );
-		return 1;fasdfa
+		return 1;
 	}
 
 

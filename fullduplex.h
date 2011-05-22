@@ -1,5 +1,5 @@
-#define np_client_server	"~/SIRA15068305_np_client_server"
-#define np_server_client	"~/SIRA15068305_np_server_client"
+#define np_client_server	"/tmp/SIRA15068305_np_client_server"
+#define np_server_client	"/tmp/SIRA15068305_np_server_client"
 #define MAX_BUF_SIZE		255
 
 static const char * rep_travail = "~/SIRA15068305";

@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 
 		//Write the answer to the second pipe    
 		write(wrfd, buf, strlen(buf));
-	} while (!strcmp(buf, "quitter"));
+	} while ( strcmp(buf, "quitter"));
 	
 	rmdir( rep_server );	
 
