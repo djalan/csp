@@ -16,4 +16,4 @@ server.o:	server.c
 
 
 clean:
-	rm *.o .nfs* *~ client server
+	rm *.o *~ client server
