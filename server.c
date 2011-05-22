@@ -50,7 +50,8 @@ int main(int argc, char *argv[])
 	buf[numread] = '\0';
 
 	printf("Full Duplex Server : Read From the pipe : %s\n", buf);
-	
+
+/*	
 	switch(option)
 	{
 		case 1:
@@ -71,6 +72,7 @@ int main(int argc, char *argv[])
 			Quitter();
 			break;
 	}
+*/
 
 	//Write the answer to the second pipe    
 	write(wrfd, buf, strlen(buf));
