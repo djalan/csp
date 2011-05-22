@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 			break;
 	}
 
-	//Write the answer to the second pipe    
+	//Write the converted string back to the second pipe    
 	write(wrfd, buf, strlen(buf));
 	
 	return 0;
