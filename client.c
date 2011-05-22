@@ -171,8 +171,8 @@ void livrerFichierCommande() {
 
 
 void quitter() {
+	envoyerCommande( "quitter" );
 	rmdir( rep_client_resultats );
-	rmdir( rep_server );
 }
 
 
@@ -182,7 +182,7 @@ int main( int argc, char * argv[] ) {
 	if ( argc > 1 ) {
 		fprintf( stderr, "%s: usage incorrect!\n", argv[0] );
 		fprintf( stderr, "Aucun argument permis.\n" );
-		return 1;
+		return 1;fasdfa
 	}
 
 
