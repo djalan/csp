@@ -7,11 +7,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <fullduplex.h> /* For name of the named-pipe */
+#include "fullduplex.h"
 
-static const char * rep_travail = "/tmp/SIRA15068305";
-static const char * rep_client  = "/tmp/SIRA15068305/client";
-static const char * rep_server  = "/tmp/SIRA15068305/server";
+
+
 
 int main(int argc, char *argv[])
 {
