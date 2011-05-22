@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 	char buf[MAX_BUF_SIZE];
 
 	//Create the first named - pipe
-	ret_val = mkfifo(np_client_server, 0666);
+	ret_val = mkfifo(np_client_server, 0777);
 
 	if ((ret_val == -1) && (errno != EEXIST))
 	{
@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 	
-	ret_val = mkfifo(np_server_client, 0666);
+	ret_val = mkfifo(np_server_client, 0777);
 
 	if ((ret_val == -1) && (errno != EEXIST))
 	{
