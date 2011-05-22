@@ -13,7 +13,10 @@
 
 
 
-char * envoyerCommande( const char * commande ) {
+void envoyerCommande( const char * commande ) {
+
+	printf( "La commande envoyée: %s\n", commande );
+
 
 	int wrfd, rdfd, numread;
         char rdbuf[MAX_BUF_SIZE];
@@ -32,7 +35,7 @@ char * envoyerCommande( const char * commande ) {
 
         rdbuf[numread] = '\0';
 
-        return rdbuf;
+        printf( "%s\n", rdbuf );
 }
 
 
@@ -82,10 +85,8 @@ void listerFichier() {
 	char commande[ 2 + (int) strlen(usager) ];
 	strcpy( commande, "1," );
 	strcat( commande, usager );
-	printf( "%s", commande );
 
-	char message_serveur[] = envoyerCommande( commande );
-	printf( "%s\n", message_serveur );
+	envoyerCommande( commande );
 }
 
 
@@ -110,8 +111,8 @@ void chercherFichierStocke() {
 	strcat( commande, usager );
 	strcat( commande, "," );
 	strcat( commande, numero_str );
-	printf( "%s", commande );
 
+	envoyerCommande( commande );
 }
 
 
@@ -131,9 +132,8 @@ void afficherFichierResultat() {
 	strcat( commande, usager );
 	strcat( commande, "," );
 	strcat( commande, fichier );
-	printf( "%s", commande );
 
-
+	envoyerCommande( commande );
 }
 
 
@@ -160,8 +160,10 @@ void livrerFichierCommande() {
 	strcat( commande, fichier );
 	strcat( commande, "," );
 	strcat( commande, desire );
-	printf( "%s", commande );
+
+	envoyerCommande( commande );
 }
+
 
 
 void quitter() {

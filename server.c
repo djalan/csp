@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 	}
 	
 	int rdfd, wrfd, ret_val, count, numread;
-	char buf[5];//MAX_BUF_SIZE];
+	char buf[MAX_BUF_SIZE];
 
 	//Create the first named - pipe
 	ret_val = mkfifo(np_client_server, 0666);
