@@ -5,10 +5,13 @@
 
 #include <string.h>
 
+#include "fullduplex.h"
 
 
 static const char * rep_travail = "/tmp/SIRA15068305";
 static const char * rep_client  = "/tmp/SIRA15068305/client";
+static const char * rep_client_fichiers  = "/tmp/SIRA15068305/client/fichiers";
+static const char * rep_client_resultats  = "/tmp/SIRA15068305/client/resultats";
 static const char * rep_server  = "/tmp/SIRA15068305/server";
 
 
@@ -55,9 +58,8 @@ void LivrerFichierCommande() {}
 
 
 void Quitter() {
-	rmdir( rep_client );
+	rmdir( rep_client_resultats );
 	rmdir( rep_server );
-/*	rmdir( rep_travail ); */
 }
 
 
@@ -73,6 +75,8 @@ int main( int argc, char * argv[] ) {
 
 	mkdir( rep_travail, 0777 );
 	mkdir( rep_client, 0777 );
+	mkdir( rep_client_fichiers, 0777 );
+	mkdir( rep_client_resultats, 0777 );
 
 
 	int option;
