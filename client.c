@@ -1,11 +1,15 @@
 #include <stdio.h>
-#include <assert.h>
 #include <unistd.h>
-#include <sys/stat.h>
-
+#include <stdlib.h>
 #include <string.h>
 
 #include "fullduplex.h"
+
+
+char * envoyerCommande( const char * commande ) {
+
+	return commande;
+}
 
 
 
@@ -38,19 +42,105 @@ int afficherMenu() {
 		scanf( "%d", &option );
 	} while( option < 1 || option > 5 );
 
+	printf( "\n" );
 	return option;
 }
 
 
 
-void ListerFichier() {}
-void ChercherFichierStocke() {}
-void AfficherFichierResultat() {}
-void LivrerFichierCommande() {}
+void listerFichier() {
+
+	char usager[50] = {0};
+
+	printf( "Entrer un nom d'usager: " );
+	scanf( "%s", usager );
+
+	char commande[ 2 + (int) strlen(usager) ];
+	strcpy( commande, "1," );
+	strcat( commande, usager );
+	printf( "%s", commande );
+
+	char message_serveur[] = envoyerCommande( commande );
+	printf( "%s\n", message_serveur );
+}
 
 
 
-void Quitter() {
+void chercherFichierStocke() {
+
+	char usager[50] = {0};
+	int numero;
+
+	printf( "Entrer un nom d'usager: " );
+	scanf( "%s", usager );
+	do {
+		printf( "Entrer un numéro de fichier: " );
+		scanf( "%d", &numero );
+	} while( numero < 0 );
+
+
+	char numero_str[10]; 
+	sprintf( numero_str, "%d", numero );
+	char commande[ 2 + (int) strlen(usager) + 1 + (int) strlen(numero_str) ];
+	strcpy( commande, "2," );
+	strcat( commande, usager );
+	strcat( commande, "," );
+	strcat( commande, numero_str );
+	printf( "%s", commande );
+
+}
+
+
+
+void afficherFichierResultat() {
+
+	char usager[50] = {0};
+	char fichier[50] = {0};
+
+	printf( "Entrer un nom d'usager: " );
+	scanf( "%s", usager );
+	printf( "Entrer un nom de fichier: " );
+	scanf( "%s", fichier );
+
+	char commande[ 2 + (int) strlen(usager) + 1 + (int) strlen(fichier) ];
+	strcpy( commande, "3," );
+	strcat( commande, usager );
+	strcat( commande, "," );
+	strcat( commande, fichier );
+	printf( "%s", commande );
+
+
+}
+
+
+
+void livrerFichierCommande() {
+
+	char usager[50] = {0};
+	char fichier[50] = {0};
+	char desire[3] = {0};
+
+	printf( "Entrer un nom d'usager: " );
+	scanf( "%s", usager );
+	printf( "Entrer un nom de fichier: " );
+	scanf( "%s", fichier );
+	do {
+		printf( "Afficher le resultat? (oui/non): " );
+		scanf( "%s", desire );
+	} while( strcmp(desire, "oui") && strcmp(desire, "non") );
+
+	char commande[ 2 + (int) strlen(usager) + 1 + (int) strlen(fichier) + 1 + (int) strlen(desire) ];
+	strcpy( commande, "4," );
+	strcat( commande, usager );
+	strcat( commande, "," );
+	strcat( commande, fichier );
+	strcat( commande, "," );
+	strcat( commande, desire );
+	printf( "%s", commande );
+}
+
+
+void quitter() {
 	rmdir( rep_client_resultats );
 	rmdir( rep_server );
 }
@@ -78,19 +168,19 @@ int main( int argc, char * argv[] ) {
 
 		switch( option ) {
 			case 1:
-				ListerFichier();
+				listerFichier();
 				break;
 			case 2:
-				ChercherFichierStocke();
+				chercherFichierStocke();
 				break;
 			case 3:
-				AfficherFichierResultat();
+				afficherFichierResultat();
 				break;
 			case 4:
-				LivrerFichierCommande();
+				livrerFichierCommande();
 				break;
 			case 5:
-				Quitter();
+				quitter();
 				break;
 		}
 	} while( option != 5 );

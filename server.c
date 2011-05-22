@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 	char buf[MAX_BUF_SIZE];
 
 	//Create the first named - pipe
-	ret_val = mkfifo(NP1, 0666);
+	ret_val = mkfifo(np_client_server, 0666);
 
 	if ((ret_val == -1) && (errno != EEXIST))
 	{
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 		exit (1);
 	}
 	
-	ret_val = mkfifo(NP2, 0666);
+	ret_val = mkfifo(np_server_client, 0666);
 
 	if ((ret_val == -1) && (errno != EEXIST))
 	{
@@ -44,10 +44,10 @@ int main(int argc, char *argv[])
 	}
 
 	//Open the first named pipe for reading
-	rdfd = open(NP1, O_RDONLY);
+	rdfd = open(np_client_server, O_RDONLY);
 
 	//Open the second named pipe for writing
-	wrfd = open(NP2, O_WRONLY);
+	wrfd = open(np_server_client, O_WRONLY);
 
 	//Read from the first pipe
 	numread = read(rdfd, buf, MAX_BUF_SIZE);
