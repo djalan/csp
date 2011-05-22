@@ -18,11 +18,11 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	
-	int rdfd, wrfd, ret_val, count, numread;
+	int rdfd, wrfd, ret_val, numread;
 	char buf[MAX_BUF_SIZE];
 
 	//Create the first named - pipe
-	ret_val = mkfifo(np_client_server, 0777);
+	ret_val = mkfifo(np_client_server, 0666);
 
 	if ((ret_val == -1) && (errno != EEXIST))
 	{
@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 	
-	ret_val = mkfifo(np_server_client, 0777);
+	ret_val = mkfifo(np_server_client, 0666);
 
 	if ((ret_val == -1) && (errno != EEXIST))
 	{
@@ -38,44 +38,26 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-	//Open the first named pipe for reading
-	rdfd = open(np_client_server, O_RDONLY);
-
-	//Open the second named pipe for writing
-	wrfd = open(np_server_client, O_WRONLY);
-
-	//Read from the first pipe
-	numread = read(rdfd, buf, MAX_BUF_SIZE);
-	
-	buf[numread] = '\0';
-
-	printf("Full Duplex Server : Read From the pipe : %s\n", buf);
-
-/*	
-	switch(option)
+	do
 	{
-		case 1:
-			ListerFichier();
-			break;
-		case 2:
-			ChercherFichierStocke();
-			break;
-		case 3:
-			AfficherFichierResultat();
-			break;
-		case 4:
-			LivrerFichierCommande();
-			break;
-		case 5:
-			ClientServeurTest();
-		case 6:
-			Quitter();
-			break;
-	}
-*/
+		//Open the first named pipe for reading
+		rdfd = open(np_client_server, O_RDONLY);
 
-	//Write the answer to the second pipe    
-	write(wrfd, buf, strlen(buf));
+		//Open the second named pipe for writing
+		wrfd = open(np_server_client, O_WRONLY);
 	
+		//Read from the first pipe
+		numread = read(rdfd, buf, MAX_BUF_SIZE);
+	
+		buf[numread] = '\0';
+
+		printf("Full Duplex Server : Read From the pipe : %s\n", buf);
+
+		//Write the answer to the second pipe    
+		write(wrfd, buf, strlen(buf));
+	} while (!strcmp(buf, "quitter"));
+	
+	rmdir( rep_server );	
+
 	return 0;
 }
