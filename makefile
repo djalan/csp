@@ -10,4 +10,4 @@ client.o:	client.c
 server.o:	server.c
 
 clean:
-	rm *.o *~ client server
+	rm *.o *~ client server a.out

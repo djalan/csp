@@ -23,16 +23,13 @@ void envoyerCommande( const char * commande ) {
 
         //Open the first named pipe for writing
         wrfd = open(np_client_server, O_WRONLY);
-
-        //Open the second named pipe for reading
-        rdfd = open(np_server_client, O_RDONLY);
-
         //Write to the pipe
         write(wrfd, commande, strlen(commande));
 
+        //Open the second named pipe for reading
+        rdfd = open(np_server_client, O_RDONLY);
         //Read from the pipe
         numread = read(rdfd, rdbuf, MAX_BUF_SIZE);
-
         rdbuf[numread] = '\0';
 
         printf( "%s\n", rdbuf );
@@ -168,7 +165,12 @@ void livrerFichierCommande() {
 
 void quitter() {
 	envoyerCommande( "quitter" );
-	rmdir( rep_client_resultats );
+
+	char effacer_rep_client[ 7 + (int) strlen(rep_client) ];
+	sprintf( effacer_rep_client, "rm -rf %s", rep_client );
+	system( effacer_rep_client );
+
+	rmdir( rep_travail );
 }
 
 
