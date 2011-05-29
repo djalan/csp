@@ -187,8 +187,6 @@ int main( int argc, char * argv[] ) {
 
 	mkdir( rep_travail, 0777 );
 	mkdir( rep_client, 0777 );
-	mkdir( rep_client_fichiers, 0777 );
-	mkdir( rep_client_resultats, 0777 );
 
 
 	int option;
