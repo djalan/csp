@@ -124,13 +124,14 @@ void afficherFichierResultat() {
 	printf( "Entrer un nom de fichier: " );
 	scanf( "%s", fichier );
 
-	char commande[ 2 + (int) strlen(usager) + 1 + (int) strlen(fichier) ];
-	strcpy( commande, "3," );
-	strcat( commande, usager );
-	strcat( commande, "," );
-	strcat( commande, fichier );
+	char fichierResultat[ (int) strlen(usager) + (int) strlen(fichier) + 8 ];
+	strcpy( fichierResultat, usager );
+	strcat( fichierResultat, fichier );
+	strcat( fichierResultat, "_res.txt" );
 
-	envoyerCommande( commande );
+	/* Valider si fichier a déjà été téléchargé */
+
+	/* Afficher le contenu du fichier */
 }
 
 
