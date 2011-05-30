@@ -9,58 +9,11 @@
 #include <fcntl.h>
 
 #include "fullduplex.h"
+#include "fichier.h"
+#include "usager.h"
+#include "tableau.h"
 
-//http://www.java2s.com/Code/C/File/Copyafile.htm
-int copierFichier( const char * source, const char * destination )
-{
-  FILE *from, *to;
-  char ch;
 
-  //open source file
-  if((from = fopen(source, "rb"))==NULL)
-  {
-    printf("Cannot open source file.\n");
-    return 1;
-  }
-
-  //open destination file
-  if((to = fopen(destination, "wb"))==NULL)
-  {
-    printf("Cannot open destination file.\n");
-    return 2;
-  }
-
-  //copy the file
-  while(!feof(from))
-  {
-    ch = fgetc(from);
-    if(ferror(from))
-    {
-      printf("Error reading source file.\n");
-      return 3;
-    }
-    if(!feof(from)) fputc(ch, to);
-    if(ferror(to))
-    {
-      printf("Error writing destination file.\n");
-      return 4;
-    }
-  }
-
-  if(fclose(from)==EOF)
-  {
-    printf("Error closing source file.\n");
-    return 5;
-  }
-
-  if(fclose(to)==EOF)
-  {
-    printf("Error closing destination file.\n");
-    return 6;
-  }
-
-  return 0;
-}
 
 void listerFichier( char * commande )
 {
@@ -69,6 +22,8 @@ void listerFichier( char * commande )
 
 	printf( "%s - %s\n", cmd, usager );
 }
+
+
 
 void chercherFichierStocke( char * commande )
 {
@@ -94,6 +49,8 @@ void chercherFichierStocke( char * commande )
 	copierFichier( source, destination);
 }
 
+
+
 void afficherFichierResultat( char * commande )
 {	
 	char * cmd	= strtok( commande, "," );
@@ -103,19 +60,7 @@ void afficherFichierResultat( char * commande )
 	printf( "%s - %s - %s\n", cmd, usager, fichier );	
 }
 
-int fileExists(const char * fileName)
-{
-	FILE * file = fopen (fileName,"rb");
-	if (file != NULL)
-	{
-		fclose (file);
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
+
 
 void removeCharFromString(char c, char *str)
 {
@@ -131,6 +76,7 @@ void removeCharFromString(char c, char *str)
         }
     }
 }
+
 
 
 void livrerFichierCommande( char * commande )
@@ -160,20 +106,20 @@ void livrerFichierCommande( char * commande )
 	strcat(destinationServer, fichier);
 	strcat(destinationServer, "_res.txt");
 	
-	if (fileExists(source) == 1)
+	if (fichierExiste(source) == 1)
 	{
 		if (strcmp(desire, "oui") == 0)
 		{
 			printf("Commande Is OK");
 			strcpy(commande, "OK");
-	  		if (fileExists(destinationClient) == 1)
+	  		if (fichierExiste(destinationClient) == 1)
 			{
 				remove(destinationClient);
 			}
 		}
 		else
 		{
-			if (fileExists(destinationServer) == 1)
+			if (fichierExiste(destinationServer) == 1)
 			{
 				remove(destinationServer);
 			}
@@ -182,7 +128,7 @@ void livrerFichierCommande( char * commande )
 	  	FILE * file = fopen (source, "rt");
 	  	char ligne[MAX_BUF_SIZE];
 	  	
-   	while(fgets(ligne, MAX_BUF_SIZE, file) != NULL)
+   		while(fgets(ligne, MAX_BUF_SIZE, file) != NULL)
   		{
   			removeCharFromString('\r', ligne);
   			removeCharFromString('\n', ligne);
@@ -212,6 +158,8 @@ void livrerFichierCommande( char * commande )
   	}
 }
 
+
+
 void quitter()
 {
 	if ( remove(np_client_server) != 0 )
@@ -238,6 +186,8 @@ void quitter()
 
 	rmdir( rep_travail );
 }
+
+
 
 int main(int argc, char *argv[])
 {

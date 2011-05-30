@@ -10,23 +10,15 @@
 #include <fcntl.h>
 
 #include "fullduplex.h"
+#include "fichier.h"
+
+
 
 char globalUsager[MAX_BUF_SIZE] = {0};
 char globalFichier[MAX_BUF_SIZE] = {0};
 
-int fileExists(const char * fileName)
-{
-	FILE * file = fopen (fileName,"rb");
-	if (file != NULL)
-	{
-		fclose (file);
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
+
+
 
 void afficherFichierResultat(const int force)
 {
@@ -55,16 +47,16 @@ void afficherFichierResultat(const int force)
 	printf("Fichier Resultat:%s\n", fichierResultat);
 
 	//Valider si fichier à déjà été téléchargé
-	if (fileExists(fichierResultat) == 1)
+	if (fichierExiste(fichierResultat) == 1)
 	{	
 		//Afficher le contenu du fichier
-   	char line[MAX_BUF_SIZE];
-   	FILE * file = fopen (fichierResultat, "rt");
+	   	char line[MAX_BUF_SIZE];
+   		FILE * file = fopen (fichierResultat, "rt");
 
-   	while(fgets(line, MAX_BUF_SIZE, file) != NULL)
-   	{
+   		while(fgets(line, MAX_BUF_SIZE, file) != NULL)
+   		{
 		 	printf("%s\n", line);
-   	}
+   		}
    	fclose(file);
    }
    else
@@ -73,25 +65,27 @@ void afficherFichierResultat(const int force)
    }
 }
 
+
+
 void envoyerCommande(const char * commande)
 {
 	printf("La commande envoyée: %s\n", commande);
 
 	int wrfd, rdfd, numread;
-   char rdbuf[MAX_BUF_SIZE];
+	char rdbuf[MAX_BUF_SIZE];
 
-   //Open the first named pipe for writing
-   wrfd = open(np_client_server, O_WRONLY);
-   //Write to the pipe
-   write(wrfd, commande, strlen(commande));
+	//Open the first named pipe for writing
+	wrfd = open(np_client_server, O_WRONLY);
+	//Write to the pipe
+	write(wrfd, commande, strlen(commande));
 
-   //Open the second named pipe for reading
-   rdfd = open(np_server_client, O_RDONLY);
-   //Read from the pipe
-   numread = read(rdfd, rdbuf, MAX_BUF_SIZE);
-   rdbuf[numread] = '\0';
-   
-   if (strcmp(rdbuf, "OK") == 0)
+	//Open the second named pipe for reading
+	rdfd = open(np_server_client, O_RDONLY);
+	//Read from the pipe
+	numread = read(rdfd, rdbuf, MAX_BUF_SIZE);
+	rdbuf[numread] = '\0';
+
+	if (strcmp(rdbuf, "OK") == 0)
 	{
 		afficherFichierResultat(1);
 	}
@@ -100,6 +94,8 @@ void envoyerCommande(const char * commande)
 		printf("%s\n", rdbuf);
 	}
 }
+
+
 
 int afficherMenu()
 {
@@ -134,6 +130,8 @@ int afficherMenu()
 	return option;
 }
 
+
+
 void listerFichier()
 {
 	char usager[50] = {0};
@@ -147,6 +145,8 @@ void listerFichier()
 
 	envoyerCommande(commande);
 }
+
+
 
 void chercherFichierStocke()
 {
@@ -171,6 +171,8 @@ void chercherFichierStocke()
 
 	envoyerCommande(commande);
 }
+
+
 
 void livrerFichierCommande()
 {
@@ -198,6 +200,8 @@ void livrerFichierCommande()
 	envoyerCommande(commande);
 }
 
+
+
 void quitter()
 {
 	envoyerCommande("quitter");
@@ -208,6 +212,8 @@ void quitter()
 
 	rmdir(rep_travail);
 }
+
+
 
 int main(int argc, char * argv[])
 {
