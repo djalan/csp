@@ -15,12 +15,40 @@
 
 
 
-void listerFichier( char * commande )
+char * listerFichier( char * commande )
 {
 	char * cmd	= strtok( commande, "," );
 	char * usager	= strtok( NULL, "," );
 
 	printf( "%s - %s\n", cmd, usager );
+
+
+	if ( !tableauContient(usager) ) {
+		return "Cet usager n'a aucun fichier!\n";	
+	} else {
+		Usager u = tableauElement( tableauPosition(usager) ); 
+		int nbrFichiers = donnerNbrFichiers( u );
+
+	        char ext[] = ".txt";
+	        int taille_rep;
+	        int taille_usager = (int) strlen(usager);
+	        int taille_ext = (int) strlen(ext);
+	        char * rep = (char *) malloc ( sizeof(char) * (taille_usager + 1 + taille_ext + 1) );
+		sprintf( rep, "%s1%s\n", usager, ext );
+	       
+		int i;
+	        char temp_str[5];
+	        for ( i=2; i<=nbrFichiers; i++ ) { 
+	                sprintf( temp_str, "%d", i );
+			char fichier[ taille_usager + (int) strlen(temp_str) + taille_ext + 1 ];
+			sprintf( fichier, "%s%d%s\n", usager, i, ext );
+	
+	                rep = (char *) realloc ( rep, sizeof(char) * ((int) strlen(rep) + (int) strlen(fichier)) );
+			strcat( rep, fichier );
+	        }   
+	
+		return rep;
+	}
 }
 
 
@@ -48,6 +76,7 @@ void chercherFichierStocke( char * commande )
 
 	copierFichier( source, destination);
 }
+
 
 
 
@@ -151,6 +180,14 @@ void livrerFichierCommande( char * commande )
 		 	printf("7");
   		}
   		fclose(file);
+
+		if ( !tableauContient(usager) ) {
+			tableauAjouter( creerUsager(usager) );
+		} else {
+			Usager u = tableauElement( tableauPosition(usager) ); 
+			ajouterFichier( u ); 
+		}
+		
   	}
   	else
   	{
@@ -234,7 +271,7 @@ int main(int argc, char *argv[])
 		switch( buf[0] )
 		{
 			case '1':
-				listerFichier( buf );
+				printf( "%s\n", listerFichier( buf ) );
 				break;
 			case '2':
 				chercherFichierStocke( buf );

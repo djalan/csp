@@ -22,7 +22,7 @@ Usager creerUsager( const char * nom ) {
 	if ( monUsager == NULL )
      		return NULL;
 	
-    monUsager->nom = malloc ( (int) strlen(nom) * sizeof(char) );
+    	monUsager->nom = malloc ( (int) strlen(nom) * sizeof(char) );
 	strcpy( monUsager->nom, nom );
 	
 	monUsager->nbrFichiers = 1;
