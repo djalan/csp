@@ -1,3 +1,21 @@
+/*
+Classe:         client.c
+
+Description:    Programme client pour envoyer des commandes au serveur
+
+Auteurs:        Alain Sirois      SIRA15068305
+                Philippe Mercure  MERC
+                
+Date:           1er juin 2011
+         
+Cours:          INF5270
+Groupe:         30
+Travail:        TP1
+Professeur:     Ammar Hamad
+*/
+
+
+
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -15,6 +33,10 @@
 
 
 
+/*
+Ouvrir un fichier et afficher son contenu a l'ecran.
+Utilise dans la fonction ci-dessous: afficherFichierResultat.
+*/
 void afficherFichier(const char * nomFic)
 {
 
@@ -39,6 +61,9 @@ void afficherFichier(const char * nomFic)
 
 
 
+/*
+Option pour afficher un fichier resultat
+*/
 void afficherFichierResultat(const int retourServeur)
 {
 	if (retourServeur == 0)
@@ -65,6 +90,10 @@ void afficherFichierResultat(const int retourServeur)
 
 
 
+/*
+Fonction pour envoyer une ligne de commande au serveur
+avec un named pipe. La fonction attend aussi une reponse du serveur
+*/
 void envoyerCommande(const char * commande)
 {
 	int wrfd, rdfd, numread;
@@ -93,6 +122,9 @@ void envoyerCommande(const char * commande)
 
 
 
+/*
+Affichage des differentes options du menu et saisie de l'option choisie
+*/
 int afficherMenu()
 {
 	printf("==========\n");
@@ -128,6 +160,9 @@ int afficherMenu()
 
 
 
+/*
+Option qui permet de lister les fichiers resultats sur le serveur pour un certain usager
+*/
 void listerFichier()
 {
 	char usager[50] = {0};
@@ -144,13 +179,18 @@ void listerFichier()
 
 
 
+/*
+Lorsque le programme doit saisir un numero, on s'assure qu'il n'y a pas
+de lettre dans la chaine saisie. Si on utilise un scanf avec un entier et
+que l'usager ne rentre pas un numero, le programme va planter
+*/
 int validerNumero( const char * chaine ) {
 
         int taille = (int) strlen(chaine);
 
         int i;
         for ( i=0; i<taille; i++ ) {
-                if ( isalpha(chaine[i]) )
+                if ( !isdigit(chaine[i]) )
                         return 0; // numero non valide
         }
         
@@ -159,6 +199,9 @@ int validerNumero( const char * chaine ) {
 
 
 
+/*
+Option qui permet de downloader un fichier resultat du serveur vers le client
+*/
 void chercherFichierStocke()
 {
         char usager[50];
@@ -183,6 +226,9 @@ void chercherFichierStocke()
 
 
 
+/*
+Option pour uploader un fichier de commandes vers le serveur
+*/
 void livrerFichierCommande()
 {
 	char desire[3] = {0};
@@ -213,6 +259,9 @@ void livrerFichierCommande()
 
 
 
+/*
+Fonction pour faire le menage quand on quitte le programme
+*/
 void quitter()
 {
 	envoyerCommande("quitter");
@@ -226,6 +275,10 @@ void quitter()
 
 
 
+/*
+Le "main"
+Affichage du menu, selection de l'option, execution de l'operation choisie
+*/
 int main(int argc, char * argv[])
 {
 	if (argc > 1)

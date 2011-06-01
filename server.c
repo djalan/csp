@@ -1,3 +1,21 @@
+/*
+Classe:         server.c
+
+Description:    Programme serveur qui attend des commandes du client
+
+Auteurs:        Alain Sirois      SIRA15068305
+                Philippe Mercure  MERC
+                
+Date:           1er juin 2011
+         
+Cours:          INF5270
+Groupe:         30
+Travail:        TP1
+Professeur:     Ammar Hamad
+*/
+
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,6 +34,11 @@
 
 
 
+/*
+Option qui permet de lister les fichiers resultats d'un usager.
+On construit une chaine de caracteres contenant la reponse et
+elle est retournee au client et afficher du cote client
+*/
 char * listerFichier( char * commande )
 {
 	char * cmd	= strtok( commande, "," );
@@ -54,6 +77,10 @@ char * listerFichier( char * commande )
 
 
 
+/*
+Option pour downloader un fichier resultat du serveur vers le client.
+On retourne un statut au client dans une chaine de caracteres.
+*/
 char * chercherFichierStocke( char * commande )
 {
 	char * cmd	= strtok( commande, "," );
@@ -84,6 +111,10 @@ char * chercherFichierStocke( char * commande )
 
 
 
+/*
+Fonction qui permet d'enlever un caractere d'une chaine.
+On decale le reste de la chaine
+*/
 void removeCharFromString(char c, char *str)
 {
     int i=0;
@@ -93,7 +124,7 @@ void removeCharFromString(char c, char *str)
     {
         if(str[i] == c)
         {
-            // Move all the char following the char "c" by one to the left.
+            // On deplace vers la gauche le caractere qui suit le char 'c'
             strncpy(&str[i],&str[i+1],len-i);
         }
     }
@@ -101,6 +132,11 @@ void removeCharFromString(char c, char *str)
 
 
 
+/*
+Option qui permet d'uploader le fichier commande du client vers le serveur.
+On decide si on envoit la reponse tout de suite au client pour l'afficher ou
+si alors on sauve la reponse dans un fichier resultat du cote serveur
+*/
 char * livrerFichierCommande( char * commande )
 {
 	char * cmd	= strtok(commande, ",");
@@ -172,6 +208,10 @@ char * livrerFichierCommande( char * commande )
 
 
 
+/*
+Fonction pour faire le menage du cote serveur une fois que celui-ci se ferme.
+La commande de fermeture est envoyee par le client.
+*/
 void quitter()
 {
 	if ( remove(np_client_server) != 0 )
@@ -201,6 +241,11 @@ void quitter()
 
 
 
+/*
+Le "main".
+Reception et envoie des commandes/reponses avec des named pipes
+Traitement des options disponibles.
+*/
 int main(int argc, char *argv[])
 {
 	if (argc > 1)

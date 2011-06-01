@@ -1,3 +1,20 @@
+/*
+Classe:         tableau.c
+
+Description:    Tableau implante sous forme de ArrayList avec quelques fonctions
+
+Auteurs:        Alain Sirois      SIRA15068305
+                Philippe Mercure  MERC
+                
+Date:           1er juin 2011
+         
+Cours:          INF5270
+Groupe:         30
+Travail:        TP1
+Professeur:     Ammar Hamad
+*/
+
+
 
 #include <stdio.h>
 #include <string.h>
@@ -12,6 +29,9 @@ static void * tableau[MAX_ELEMS];
 
 
 
+/*
+Ajouter un element dans le tableau
+*/
 void tableauAjouter( void * elem ) {
 
 	assert (elem != NULL && "usager doit être valide (pointeur non NULL)");
@@ -22,6 +42,9 @@ void tableauAjouter( void * elem ) {
 
 
 
+/*
+Retourner la taille du tableau
+*/
 int tableauTaille() {
 
 	return nbrElements;
@@ -29,6 +52,9 @@ int tableauTaille() {
 
 
 
+/*
+Retourner si le tableau contient un certain nom d'usager
+*/
 int tableauContient( const char * nom ) {
 
 	int i;
@@ -42,6 +68,9 @@ int tableauContient( const char * nom ) {
 
 
 
+/*
+Retourner la position d'un usager dans le tableau selon son nom
+*/
 int tableauPosition( const char * nom ) {
 
 	int i;
@@ -55,6 +84,9 @@ int tableauPosition( const char * nom ) {
 
 
 
+/*
+Retourner l'element contenu a une certaine position dans le tableau
+*/
 void * tableauElement( int position ) {
 	
 	return tableau[position];

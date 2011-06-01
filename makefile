@@ -13,4 +13,4 @@ tableau.o:	tableau.c tableau.h
 fichier.o:	fichier.c fichier.h
 
 clean:
-	rm *.o *~ client server
+	rm *.o *~
