@@ -1,5 +1,0 @@
-mkdir /tmp/123
-touch /tmp/123/fichier
-ls -l /tmp/123/fichier
-chmod 777 /tmp/123/fichier
-ls -l /tmp/123/fichier
