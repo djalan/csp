@@ -12,6 +12,7 @@
 #include "fichier.h"
 #include "usager.h"
 #include "tableau.h"
+#include "config.h"
 
 
 
@@ -29,31 +30,31 @@ char * listerFichier( char * commande )
 		Usager u = tableauElement( tableauPosition(usager) ); 
 		int nbrFichiers = donnerNbrFichiers( u );
 
-	        char ext[] = ".txt";
-	        int taille_rep;
-	        int taille_usager = (int) strlen(usager);
-	        int taille_ext = (int) strlen(ext);
-	        char * rep = (char *) malloc ( sizeof(char) * (taille_usager + 1 + taille_ext + 1) );
+	    char ext[] = "_res.txt";
+	    //int taille_rep;
+	    int taille_usager = (int) strlen(usager);
+	    int taille_ext = (int) strlen(ext);
+	    char * rep = (char *) malloc ( sizeof(char) * (taille_usager + 1 + taille_ext + 1) );
 		sprintf( rep, "%s1%s\n", usager, ext );
 	       
-		int i;
-	        char temp_str[5];
-	        for ( i=2; i<=nbrFichiers; i++ ) { 
-	                sprintf( temp_str, "%d", i );
-			char fichier[ taille_usager + (int) strlen(temp_str) + taille_ext + 1 ];
-			sprintf( fichier, "%s%d%s\n", usager, i, ext );
-	
-	                rep = (char *) realloc ( rep, sizeof(char) * ((int) strlen(rep) + (int) strlen(fichier)) );
-			strcat( rep, fichier );
-	        }   
-	
+        int i;
+        char temp_str[5];
+        for ( i=2; i<=nbrFichiers; i++ ) { 
+            sprintf( temp_str, "%d", i );
+            char fichier[ taille_usager + (int) strlen(temp_str) + taille_ext + 1 ];
+            sprintf( fichier, "%s%d%s\n", usager, i, ext );
+
+            rep = (char *) realloc ( rep, sizeof(char) * ((int) strlen(rep) + (int) strlen(fichier)) );
+            strcat( rep, fichier );
+        }   
+
 		return rep;
 	}
 }
 
 
 
-void chercherFichierStocke( char * commande )
+char * chercherFichierStocke( char * commande )
 {
 	char * cmd	= strtok( commande, "," );
 	char * usager	= strtok( NULL, "," );
@@ -74,19 +75,11 @@ void chercherFichierStocke( char * commande )
 	strcpy( destination, rep_client );
 	strcat( destination, fichierResultat);
 
-	copierFichier( source, destination);
-}
-
-
-
-
-void afficherFichierResultat( char * commande )
-{	
-	char * cmd	= strtok( commande, "," );
-	char * usager	= strtok( NULL, "," );
-	char * fichier	= strtok( NULL, "," );
-
-	printf( "%s - %s - %s\n", cmd, usager, fichier );	
+	if ( copierFichier( source, destination) == 0 ) {
+	   return "Le fichier a ete telecharge!\n";
+    } else {
+        return "Le fichier n'existe pas. Le telechargement a echoue!\n";
+    }
 }
 
 
@@ -108,53 +101,38 @@ void removeCharFromString(char c, char *str)
 
 
 
-void livrerFichierCommande( char * commande )
+char * livrerFichierCommande( char * commande )
 {
 	char * cmd	= strtok(commande, ",");
 	char * usager = strtok(NULL, ",");
 	char * fichier	= strtok(NULL, ",");
 	char * desire	= strtok(NULL, ",");
 	
-	printf("%s - %s - %s - %s\n", cmd, usager, fichier, desire);
+	//printf("%s - %s - %s - %s\n", cmd, usager, fichier, desire);
 	
-	char source[ (int)strlen(rep_client) + (int)strlen(usager) + (int)strlen(fichier) + 4 ];
-	strcpy(source, rep_client);
-	strcat(source, usager);
-	strcat(source, fichier);
-	strcat(source, ".txt");
-	
-	char destinationClient[ (int)strlen(rep_client) + (int)strlen(usager) + (int)strlen(fichier) + 8 ];
-	strcpy(destinationClient, rep_server);
-	strcat(destinationClient, usager);
-	strcat(destinationClient, fichier);
-	strcat(destinationClient, "_res.txt");
-	
-	char destinationServer[ (int)strlen(rep_server) + (int)strlen(usager) + (int)strlen(fichier) + 8 ];
-	strcpy(destinationServer, rep_server);
-	strcat(destinationServer, usager);
-	strcat(destinationServer, fichier);
-	strcat(destinationServer, "_res.txt");
-	
-	if (fichierExiste(source) == 1)
+
+	if (fichierExiste(fichier) == 1)
 	{
-		if (strcmp(desire, "oui") == 0)
+	    int nbrFic;
+	    char * destinationServer;
+		if (!strcmp(desire, "non"))
 		{
-			printf("Commande Is OK");
-			strcpy(commande, "OK");
-	  		if (fichierExiste(destinationClient) == 1)
-			{
-				remove(destinationClient);
-			}
-		}
-		else
-		{
-			if (fichierExiste(destinationServer) == 1)
-			{
-				remove(destinationServer);
-			}
+		    
+			if ( !tableauContient(usager) ) {
+    			tableauAjouter( creerUsager(usager) );
+    		} else {
+    			ajouterFichier( tableauElement(tableauPosition(usager)) ); 
+    		}
+    		
+    	
+  		 	char temp_str[5];
+  		 	nbrFic = donnerNbrFichiers( tableauElement(tableauPosition(usager)) );
+		    sprintf( temp_str, "%d", nbrFic );
+       		destinationServer = malloc ( sizeof(char) * ((int)strlen(rep_server) + (int)strlen(usager) + (int)strlen(temp_str) + 8) );
+        	sprintf( destinationServer, "%s%s%d_res.txt", rep_server, usager, nbrFic );
 		}
 		
-	  	FILE * file = fopen (source, "rt");
+	  	FILE * file = fopen (fichier, "rt");
 	  	char ligne[MAX_BUF_SIZE];
 	  	
    		while(fgets(ligne, MAX_BUF_SIZE, file) != NULL)
@@ -162,36 +140,33 @@ void livrerFichierCommande( char * commande )
   			removeCharFromString('\r', ligne);
   			removeCharFromString('\n', ligne);
   			strcat(ligne, " >> ");
-  			printf("1");
-  			if (strcmp(desire, "oui") == 0)
+  			if (!strcmp(desire, "non"))
 			{
-				printf("2");
-				strcat(ligne, destinationClient);
-				printf("3");
+				strcat(ligne, destinationServer);
 			}
 			else
 			{
-				printf("4");
-				strcat(ligne, destinationServer);
-				printf("5");
+				strcat(ligne, fichier_client_res);
 			}
-			printf("6");
 		 	system(ligne);
-		 	printf("7");
   		}
   		fclose(file);
-
-		if ( !tableauContient(usager) ) {
-			tableauAjouter( creerUsager(usager) );
-		} else {
-			Usager u = tableauElement( tableauPosition(usager) ); 
-			ajouterFichier( u ); 
-		}
-		
+  		
+    	if (!strcmp(desire, "non"))
+    	{
+    		char temp_str[5];
+    		sprintf( temp_str, "%d", nbrFic );
+    		char message[] = "Votre numero de fichier est: ";
+    		char * reponse = malloc ( sizeof(char) * ((int)strlen(message) + (int)strlen(temp_str) + 1) );
+    		sprintf( reponse, "%s%d\n", message, nbrFic );
+       		return reponse;
+        } else {
+            return "Okay, afficher resultat";
+        }
   	}
   	else
   	{
-  		printf("Ce fichier n'existe pas\n");
+  	     return "Ce fichier n'existe pas\n";
   	}
 }
 
@@ -205,7 +180,7 @@ void quitter()
 	}
 	else
 	{
-		printf( "Le named pipe np_client_server a été supprimé!\n" );
+		printf( "Le named pipe np_client_server a ete supprime!\n" );
 	}
 			
 	if ( remove(np_server_client) != 0 )
@@ -214,7 +189,7 @@ void quitter()
 	}
 	else
 	{
-		printf( "Le named pipe np_server_client a été supprimé!\n" );
+		printf( "Le named pipe np_server_client a ete supprime!\n" );
 	}
 
 	char effacer_rep_server[ 7 + (int) strlen(rep_server) ];
@@ -271,16 +246,13 @@ int main(int argc, char *argv[])
 		switch( buf[0] )
 		{
 			case '1':
-				printf( "%s\n", listerFichier( buf ) );
+				sprintf( buf, "%s", listerFichier( buf ) );
 				break;
 			case '2':
-				chercherFichierStocke( buf );
-				break;
-			case '3':
-				afficherFichierResultat( buf );
+				sprintf( buf, "%s", chercherFichierStocke( buf ) );
 				break;
 			case '4':
-				livrerFichierCommande( buf );
+				sprintf( buf, "%s", livrerFichierCommande( buf ) );
 				break;
 			case 'q':
 				break;

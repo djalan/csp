@@ -36,7 +36,7 @@ int copierFichier( const char * source, const char * destination )
 		if(!feof(from)) fputc(ch, to);
 		if(ferror(to))
 		{
-			printf("Erreur lors de l'écriture du fichier destination!\n");
+			printf("Erreur lors de l'ecriture du fichier destination!\n");
 			return 4;
 		}
 	}

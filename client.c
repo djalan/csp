@@ -11,66 +11,62 @@
 
 #include "fullduplex.h"
 #include "fichier.h"
+#include "config.h"
 
 
 
-char globalUsager[MAX_BUF_SIZE] = {0};
-char globalFichier[MAX_BUF_SIZE] = {0};
-
-
-
-
-void afficherFichierResultat(const int force)
+void afficherFichier(const char * nomFic)
 {
-	char usager[MAX_BUF_SIZE] = {0};
-	char fichier[MAX_BUF_SIZE] = {0};
 
-	if (force == 0)
+	//Valider si fichier a deja ete telecharge
+	if (fichierExiste(nomFic) == 1)
+	{	
+		//Afficher le contenu du fichier
+	   	char line[MAX_BUF_SIZE];
+   		FILE * file = fopen (nomFic, "rt");
+
+   		while(fgets(line, MAX_BUF_SIZE, file) != NULL)
+   		{
+		 	printf("%s", line);
+   		}
+   	    fclose(file);
+    }
+    else
+    {
+        printf("Ce fichier n'existe pas\n");
+    }
+}
+
+
+
+void afficherFichierResultat(const int retourServeur)
+{
+	if (retourServeur == 0)
 	{
+    	char usager[256];
+    	char fichier[256];
+    	
 		printf("Entrer un nom d'usager: ");
 		scanf("%s", usager);
 		printf("Entrer un nom de fichier: ");
 		scanf("%s", fichier);
+
+    	char fichierResultat[ (int) strlen(rep_client) + (int) strlen(fichier)];
+    	strcpy(fichierResultat, rep_client);
+    	strcat(fichierResultat, fichier);
+    	
+    	afficherFichier(fichierResultat);
 	}
 	else
 	{
-		strcpy(usager, globalUsager);
-		strcpy(fichier, globalFichier);
+	    afficherFichier(fichier_client_res);
 	}
-
-	char fichierResultat[ (int) strlen(usager) + (int) strlen(fichier) + 8 ];
-	strcpy(fichierResultat, rep_client);
-	strcat(fichierResultat, usager);
-	strcat(fichierResultat, fichier);
-	strcat(fichierResultat, "_res.txt");
-
-	printf("Fichier Resultat:%s\n", fichierResultat);
-
-	//Valider si fichier à déjà été téléchargé
-	if (fichierExiste(fichierResultat) == 1)
-	{	
-		//Afficher le contenu du fichier
-	   	char line[MAX_BUF_SIZE];
-   		FILE * file = fopen (fichierResultat, "rt");
-
-   		while(fgets(line, MAX_BUF_SIZE, file) != NULL)
-   		{
-		 	printf("%s\n", line);
-   		}
-   	fclose(file);
-   }
-   else
-   {
-   	printf("Ce fichier n'existe pas\n");
-   }
 }
 
 
 
 void envoyerCommande(const char * commande)
 {
-	printf("La commande envoyée: %s\n", commande);
-
 	int wrfd, rdfd, numread;
 	char rdbuf[MAX_BUF_SIZE];
 
@@ -85,7 +81,7 @@ void envoyerCommande(const char * commande)
 	numread = read(rdfd, rdbuf, MAX_BUF_SIZE);
 	rdbuf[numread] = '\0';
 
-	if (strcmp(rdbuf, "OK") == 0)
+	if (!strcmp(rdbuf, "Okay, afficher resultat"))
 	{
 		afficherFichierResultat(1);
 	}
@@ -105,16 +101,16 @@ int afficherMenu()
 	printf("1) ListerFichier(Usager)\n");
 	printf("     lister les fichiers d'un usager sur le serveur\n");
 	printf("\n");
-	printf("2) ChercherFichierStocké(Usager, Numéro)\n");
-	printf("     pour chercher un fichier résultat qui a été sauvé sur le Serveur\n");
+	printf("2) ChercherFichierStocke(Usager, Numero)\n");
+	printf("     pour chercher un fichier resultat qui a ete sauve sur le Serveur\n");
 	printf("\n");
-	printf("3) AfficherFichierRésultat(Usager, Fichier)\n");
+	printf("3) AfficherFichierResultat(Usager, Fichier)\n");
 	printf("     pour lire le contenu d'un fichier de l'usager\n");
 	printf("\n");
-	printf("4) LivrerFichierCommande(Usager, Fichier, Désire(oui/non))\n");
+	printf("4) LivrerFichierCommande(Usager, Fichier, Desire(oui/non))\n");
 	printf("     Envoi d'un fichier de commandes Unix\n");
-	printf("     oui = résultat retourné dans un fichier et afficher au niveau client\n");
-	printf("     non = résultat sauvé au niveau du serveur\n");
+	printf("     oui = resultat retourne dans un fichier et afficher au niveau client\n");
+	printf("     non = resultat sauve au niveau du serveur\n");
 	printf("\n");
 	printf("5) Quitter le programme\n");
 	printf("=======================\n");
@@ -150,19 +146,21 @@ void listerFichier()
 
 void chercherFichierStocke()
 {
-	char usager[50] = {0};
-	int numero;
+	char usager[50];
+	char numero[10];
+	int num;
 
 	printf("Entrer un nom d'usager: ");
 	scanf("%s", usager);
 	do
 	{
-		printf("Entrer un numéro de fichier: ");
-		scanf("%d", &numero);
-	} while(numero < 0);
+		printf("Entrer un numero de fichier: ");
+		scanf("%s", numero);
+		num = atoi(numero);
+	} while(num < 0);
 
 	char numero_str[10]; 
-	sprintf(numero_str, "%d", numero);
+	sprintf(numero_str, "%d", num);
 	char commande[ 2 + (int) strlen(usager) + 1 + (int) strlen(numero_str) ];
 	strcpy(commande, "2,");
 	strcat(commande, usager);
@@ -177,22 +175,24 @@ void chercherFichierStocke()
 void livrerFichierCommande()
 {
 	char desire[3] = {0};
+	char usager[256];
+	char fichier[256];
 
 	printf("Entrer un nom d'usager: ");
-	scanf("%s", globalUsager);
+	scanf("%s", usager);
 	printf("Entrer un nom de fichier: ");
-	scanf("%s", globalFichier);
+	scanf("%s", fichier);
 	do
 	{
 		printf("Afficher le resultat? (oui/non): ");
 		scanf("%s", desire);
 	} while(strcmp(desire, "oui") && strcmp(desire, "non"));
 
-	char commande[ 2 + (int) strlen(globalUsager) + 1 + (int) strlen(globalFichier) + 1 + (int) strlen(desire) ];
+	char commande[ 2 + (int) strlen(usager) + 1 + (int) strlen(fichier) + 1 + (int) strlen(desire) ];
 	strcpy(commande, "4,");
-	strcat(commande, globalUsager);
+	strcat(commande, usager);
 	strcat(commande, ",");
-	strcat(commande, globalFichier);
+	strcat(commande, fichier);
 	strcat(commande, ",");
 	strcat(commande, desire);
 	strcat(commande, "\0");
@@ -250,6 +250,7 @@ int main(int argc, char * argv[])
 				quitter();
 				break;
 		}
+		sleep(2); // pause
 	} while(option != 5);
 	
 	return 0;
