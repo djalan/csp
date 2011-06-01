@@ -144,28 +144,39 @@ void listerFichier()
 
 
 
+int validerNumero( const char * chaine ) {
+
+        int taille = (int) strlen(chaine);
+
+        int i;
+        for ( i=0; i<taille; i++ ) {
+                if ( isalpha(chaine[i]) )
+                        return 0; // numero non valide
+        }
+        
+        return 1; // numero valide
+}
+
+
+
 void chercherFichierStocke()
 {
-	char usager[50];
-	char numero[10];
-	int num;
+        char usager[50];
+        char numero[50];
 
-	printf("Entrer un nom d'usager: ");
-	scanf("%s", usager);
-	do
-	{
-		printf("Entrer un numero de fichier: ");
-		scanf("%s", numero);
-		num = atoi(numero);
-	} while(num < 0);
+        printf("Entrer un nom d'usager: ");
+        scanf("%s", usager);
+        do
+        {
+                printf("Entrer un numero de fichier: ");
+                scanf("%s", numero);
+        } while( !validerNumero(numero) || atoi(numero) < 1 );
 
-	char numero_str[10]; 
-	sprintf(numero_str, "%d", num);
-	char commande[ 2 + (int) strlen(usager) + 1 + (int) strlen(numero_str) ];
-	strcpy(commande, "2,");
-	strcat(commande, usager);
-	strcat(commande, ",");
-	strcat(commande, numero_str);
+        char commande[ 2 + (int) strlen(usager) + 1 + (int) strlen(numero) ];
+        strcpy(commande, "2,");
+        strcat(commande, usager);
+        strcat(commande, ",");
+        strcat(commande, numero);
 
 	envoyerCommande(commande);
 }
@@ -250,7 +261,7 @@ int main(int argc, char * argv[])
 				quitter();
 				break;
 		}
-		sleep(2); // pause
+		sleep(3); // pause
 	} while(option != 5);
 	
 	return 0;

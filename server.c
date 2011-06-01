@@ -104,7 +104,7 @@ void removeCharFromString(char c, char *str)
 char * livrerFichierCommande( char * commande )
 {
 	char * cmd	= strtok(commande, ",");
-	char * usager = strtok(NULL, ",");
+	char * usager   = strtok(NULL, ",");
 	char * fichier	= strtok(NULL, ",");
 	char * desire	= strtok(NULL, ",");
 	

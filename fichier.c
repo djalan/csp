@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/stat.h>
+
 #include "fichier.h"
 
 
@@ -60,8 +62,12 @@ int copierFichier( const char * source, const char * destination )
 
 int fichierExiste(const char * fichier)
 {
+
+	struct stat st;
+	stat( fichier, &st );
+
 	FILE * file = fopen (fichier,"rb");
-	if (file != NULL)
+	if ( file != NULL && S_ISREG(st.st_mode) )
 	{
 		fclose (file);
 		return 1;
