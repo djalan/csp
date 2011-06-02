@@ -4,7 +4,7 @@ Classe:         usager.c
 Description:    Structure objet pour definir un usager et ses attributs
 
 Auteurs:        Alain Sirois      SIRA15068305
-                Philippe Mercure  MERC
+                Philippe Mercure  MERP27078708
                 
 Date:           1er juin 2011
          

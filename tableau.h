@@ -4,7 +4,7 @@ Classe:         tableau.h
 Description:    Tableau implante sous forme de ArrayList avec quelques fonctions
 
 Auteurs:        Alain Sirois      SIRA15068305
-                Philippe Mercure  MERC
+                Philippe Mercure  MERP27078708
                 
 Date:           1er juin 2011
          

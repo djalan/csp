@@ -5,7 +5,7 @@ Description:    Fichier de configuration pour les repertoires de travail
                 du client et du serveur
 
 Auteurs:        Alain Sirois      SIRA15068305
-                Philippe Mercure  MERC
+                Philippe Mercure  MERP27078708
                 
 Date:           1er juin 2011
          

@@ -4,7 +4,7 @@ Classe:         fichier.h
 Description:    Bibliotheque de fonctions pour traiter des fichiers
 
 Auteurs:        Alain Sirois      SIRA15068305
-                Philippe Mercure  MERC
+                Philippe Mercure  MERP27078708
                 
 Date:           1er juin 2011
          
